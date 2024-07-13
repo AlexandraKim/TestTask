@@ -1,6 +1,18 @@
 @using TestTask.Models.Utility
 @model IEnumerable<TestTask.Models.Dto.ProductDto>
+@if (User.IsInRole(Constants.RoleAdmin))
+{
+  
 
+  <div class="row pb-3">
+    <div class="col-6">
+    </div>
+    <div class="col-6 text-end">
+      <a class="btn btn-outline-primary" asp-action="ProductCreate"><i class="bi bi-plus-square"></i> Create New Product</a>
+
+    </div>
+  </div>
+}
 <table class="table">
   <thead>
   <tr>
@@ -9,7 +21,10 @@
     <th scope="col">Quantity</th>
     <th scope="col">Price</th>
     <th scope="col">Total Price With VAT</th>
-    <th scope="col">Action</th>
+    @if (User.IsInRole(Constants.RoleAdmin))
+    {
+      <th scope="col">Action</th>
+    }
   </tr>
   </thead>
   <tbody>

@@ -12,7 +12,7 @@ public class MappingConfig
     {
       config.CreateMap<ProductDto, Product>().ReverseMap()
         .ForMember(dest => dest.TotalPriceWithVat, p => 
-          p.MapFrom(src => src.Price * src.Quantity * VatValue.Value / 100));
+          p.MapFrom(src => src.Price * src.Quantity * (VatValue.Value) / 100));
     });
     return mappingConfig;
   }
