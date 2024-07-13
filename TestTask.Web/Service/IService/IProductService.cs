@@ -5,9 +5,9 @@ namespace TestTask.Service.IService;
 
 public interface IProductService
 {
-  Task<IEnumerable<ProductDto>> GetAllProductsAsync();
-  Task<ProductDto?> GetProductByIdAsync(int id);
-  Task<ProductDto?> CreateProductAsync(ProductDto productDto);
-  Task<ProductDto?> UpdateProductAsync(ProductDto productDto);
-  Task<bool> DeleteAsync(int id);
+  Task<ResponseDto?> GetAllProductsAsync();
+  Task<ResponseDto?> GetProductByIdAsync(int id);
+  Task<ResponseDto?> CreateProductAsync(ProductDto productDto);
+  Task<ResponseDto?> UpdateProductAsync(ProductDto productDto);
+  Task<ResponseDto?> DeleteAsync(int id);
 }

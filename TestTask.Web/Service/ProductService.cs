@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using TestTask.Data;
+using TestTask.Models;
 using TestTask.Models.Dto;
 using TestTask.Service.IService;
 
@@ -8,29 +9,114 @@ namespace TestTask.Service;
 
 public class ProductService(AppDbContext db, IMapper mapper) : IProductService
 {
-  public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+  public async Task<ResponseDto?> GetAllProductsAsync()
   {
-    return await db.Products.Select(x => mapper.Map<ProductDto>(x))
-      .ToArrayAsync();
+    try
+    {
+      var products = await db.Products.Select(x => mapper.Map<ProductDto>(x))
+        .ToArrayAsync();
+      return new ResponseDto
+      {
+        Result = products
+      };
+    }
+    catch (Exception e)
+    {
+      return new ResponseDto
+      {
+        IsSuccess = false,
+        Message = "An error occurred: " + e.Message
+      };
+    }
   }
 
-  public async Task<ProductDto?> GetProductByIdAsync(int id)
+  public async Task<ResponseDto?> GetProductByIdAsync(int id)
   {
-    return mapper.Map<ProductDto>(await db.Products.FirstOrDefaultAsync(x => x.ProductId == id));
+    try
+    {
+      var product = await db.Products.FirstAsync(x => x.ProductId == id);
+      return new ResponseDto
+      {
+        Result = mapper.Map<ProductDto>(product)
+      };
+    }
+    catch (Exception e)
+    {
+      return new ResponseDto
+      {
+        IsSuccess = false,
+        Message = "An error occurred: " + e.Message
+      };
+    }
   }
 
-  public Task<ProductDto?> CreateProductAsync(ProductDto productDto)
+  public async Task<ResponseDto?> CreateProductAsync(ProductDto productDto)
   {
-    throw new NotImplementedException();
+    try
+    {
+      var product = mapper.Map<Product>(productDto);
+      db.Products.Add(product);
+      await db.SaveChangesAsync();
+
+      return new ResponseDto
+      {
+        Message = "Product created successfully!"
+      };
+    }
+    catch (Exception e)
+    {
+      return new ResponseDto
+      {
+        IsSuccess = false,
+        Message = "An error occurred during creation: " + e.Message
+      };
+    }
   }
 
-  public Task<ProductDto?> UpdateProductAsync(ProductDto productDto)
+  public async Task<ResponseDto?> UpdateProductAsync(ProductDto productDto)
   {
-    throw new NotImplementedException();
+    try
+    {
+      var product = mapper.Map<Product>(productDto);
+
+      db.Products.Update(product);
+      await db.SaveChangesAsync();
+
+      return new ResponseDto
+      {
+        Message = "Product updated successfully!"
+      };
+    }
+    catch (Exception e)
+    {
+      return new ResponseDto
+      {
+        IsSuccess = false,
+        Message = "An error occurred during update: " + e.Message
+      };
+    }
   }
 
-  public Task<bool> DeleteAsync(int id)
+  public async Task<ResponseDto?> DeleteAsync(int id)
   {
-    throw new NotImplementedException();
+    try
+    {
+      var product = db.Products.First(x => x.ProductId == id);
+      db.Products.Remove(product);
+      await db.SaveChangesAsync();
+
+      return new ResponseDto
+      {
+        Message = "Product deleted successfully!"
+      };
+    }
+    catch (Exception e)
+    {
+      return new ResponseDto
+      {
+        IsSuccess = false,
+        Message = "An error occurred during deletion: " + e.Message
+      };
+    }
   }
 }
