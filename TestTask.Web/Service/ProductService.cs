@@ -1,13 +1,18 @@
+using System.Security.Claims;
 using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using TestTask.Data;
 using TestTask.Models;
 using TestTask.Models.Dto;
+using TestTask.Models.Utility;
 using TestTask.Service.IService;
+using TestTask.Utility;
 
 namespace TestTask.Service;
 
-public class ProductService(AppDbContext db, IMapper mapper) : IProductService
+public class ProductService(AppDbContext db, IMapper mapper, IProductChangeService productChangeService) : IProductService
 {
   public async Task<ResponseDto?> GetAllProductsAsync()
   {
@@ -52,19 +57,25 @@ public class ProductService(AppDbContext db, IMapper mapper) : IProductService
 
   public async Task<ResponseDto?> CreateProductAsync(ProductDto productDto)
   {
+    await using var transaction = await db.Database.BeginTransactionAsync();
     try
     {
       var product = mapper.Map<Product>(productDto);
       db.Products.Add(product);
       await db.SaveChangesAsync();
 
+      await productChangeService.LogChangeAsync(product, ChangeType.Create);
+      
+      await transaction.CommitAsync();
       return new ResponseDto
       {
+        Result = productDto,
         Message = "Product created successfully!"
       };
     }
     catch (Exception e)
     {
+      await transaction.RollbackAsync();
       return new ResponseDto
       {
         IsSuccess = false,
@@ -75,13 +86,16 @@ public class ProductService(AppDbContext db, IMapper mapper) : IProductService
 
   public async Task<ResponseDto?> UpdateProductAsync(ProductDto productDto)
   {
+    await using var transaction = await db.Database.BeginTransactionAsync();
     try
     {
       var product = mapper.Map<Product>(productDto);
-
       db.Products.Update(product);
       await db.SaveChangesAsync();
 
+      await productChangeService.LogChangeAsync(product, ChangeType.Update);
+      
+      await transaction.CommitAsync();
       return new ResponseDto
       {
         Message = "Product updated successfully!"
@@ -89,6 +103,7 @@ public class ProductService(AppDbContext db, IMapper mapper) : IProductService
     }
     catch (Exception e)
     {
+      await transaction.RollbackAsync();
       return new ResponseDto
       {
         IsSuccess = false,
@@ -99,11 +114,16 @@ public class ProductService(AppDbContext db, IMapper mapper) : IProductService
 
   public async Task<ResponseDto?> DeleteAsync(int id)
   {
+    await using var transaction = await db.Database.BeginTransactionAsync();
     try
     {
       var product = db.Products.First(x => x.ProductId == id);
       db.Products.Remove(product);
       await db.SaveChangesAsync();
+      
+      await productChangeService.LogChangeAsync(product, ChangeType.Delete);
+      
+      await transaction.CommitAsync();
 
       return new ResponseDto
       {
@@ -112,6 +132,7 @@ public class ProductService(AppDbContext db, IMapper mapper) : IProductService
     }
     catch (Exception e)
     {
+      await transaction.RollbackAsync();
       return new ResponseDto
       {
         IsSuccess = false,

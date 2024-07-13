@@ -8,10 +8,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
 {
   public DbSet<ApplicationUser> ApplicationUsers { get; set; }
   public DbSet<Product> Products { get; set; }
+  public DbSet<ProductChange> ProductChanges { get; set; }
   
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
+    
+    modelBuilder.Entity<Product>()
+      .HasKey(x => x.ProductId);
     
     modelBuilder.Entity<Product>().HasData(new Product
     {
@@ -35,5 +39,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
       Quantity = 47,
       Price = 80.32,
     });
+    
+    modelBuilder.Entity<ProductChange>()
+      .HasKey(x => x.ProductChangeId);
+    modelBuilder.Entity<ProductChange>()
+      .HasOne<Product>(x => x.Product)
+      .WithMany(x => x.ProductChanges);
+    
+   
   }
 };

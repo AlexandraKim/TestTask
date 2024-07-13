@@ -7,8 +7,9 @@ using Constants = TestTask.Models.Utility.Constants;
 
 namespace TestTask.Controllers;
 
-public class AuthController(IAuthService authService
-  ) : Controller
+public class AuthController(
+  IAuthService authService
+) : Controller
 {
   [HttpGet]
   public IActionResult Login()
@@ -48,17 +49,11 @@ public class AuthController(IAuthService authService
     {
       if (string.IsNullOrEmpty(registrationRequestDto.Role)) registrationRequestDto.Role = Constants.RoleUser;
 
-      bool assignRoleResult = await authService.AssignRoleAsync(registrationRequestDto.Email, registrationRequestDto.Role);
-      if (assignRoleResult)
-      {
-        TempData["success"] = "Registration Successful";
-        return RedirectToAction("Index", "Products");
-      }
+      TempData["success"] = "Registration Successful";
+      return RedirectToAction("Index", "Products");
     }
-    else
-    {
-      TempData["error"] = result;
-    }
+
+    TempData["error"] = result;
 
     var roleList = new List<SelectListItem>
     {

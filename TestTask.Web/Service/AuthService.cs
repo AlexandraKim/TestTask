@@ -64,7 +64,7 @@ public class AuthService(
     await signInManager.SignOutAsync();
   }
 
-  public async Task<bool> AssignRoleAsync(string email, string roleName)
+  private async Task<bool> AssignRoleAsync(string email, string roleName)
   {
     var user = dbContext.ApplicationUsers.FirstOrDefault(
       u => u.UserName.ToLower() == email.ToLower());
