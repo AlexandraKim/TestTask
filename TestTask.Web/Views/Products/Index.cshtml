@@ -1,0 +1,47 @@
+@using TestTask.Models.Utility
+@model IEnumerable<TestTask.Models.Dto.ProductDto>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th scope="col">#</th>
+    <th scope="col">Title</th>
+    <th scope="col">Quantity</th>
+    <th scope="col">Price</th>
+    <th scope="col">Total Price With VAT</th>
+    <th scope="col">Action</th>
+  </tr>
+  </thead>
+  <tbody>
+  @foreach (var item in Model)
+   {
+     <tr>
+       <td>
+         @item.ProductId
+       </td>
+       <td>
+         @item.Title
+       </td>
+       <td>
+         @item.Quantity
+       </td>
+       <td>
+          @item.Price</td>
+       <td>
+         @item.TotalPriceWithVat</td>
+        @if (User.IsInRole(Constants.RoleAdmin))
+        {
+          <td>
+            <a class="btn btn-success" asp-action="ProductUpdate" asp-route-id="@item.ProductId">
+              <i class="bi bi-pencil-square"></i>
+            </a>
+            <a class="btn btn-danger" asp-action="ProductDelete" asp-route-id="@item.ProductId">
+              <i class="bi bi-trash"></i>
+            </a>
+          </td>
+        }
+     </tr>
+   }
+ 
+  </tbody>
+</table>
