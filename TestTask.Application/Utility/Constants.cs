@@ -1,4 +1,4 @@
-namespace TestTask.Models.Utility;
+namespace TestTask.Application.Utility;
 
 public class Constants
 {

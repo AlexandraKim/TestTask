@@ -14,6 +14,8 @@ internal static class MappingConfig
       config.CreateMap<ProductDto, Product>().ReverseMap()
         .ForMember(dest => dest.TotalPriceWithVat, p => 
           p.MapFrom(src => src.Price * src.Quantity * (1 + VatValue.Value)));
+      
+      config.CreateMap<ProductChangeDto, ProductChange>().ReverseMap();
     });
     return mappingConfig;
   }

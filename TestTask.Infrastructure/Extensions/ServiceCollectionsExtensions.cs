@@ -6,7 +6,6 @@ using TestTask.Application.Identity;
 using TestTask.Core.Entities;
 using TestTask.Core.Interfaces;
 using TestTask.Core.Interfaces.Repositories;
-using TestTask.Core.Utility;
 using TestTask.Infrastructure.Identity;
 using TestTask.Infrastructure.Persistence;
 using TestTask.Infrastructure.Repositories;
