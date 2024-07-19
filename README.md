@@ -24,13 +24,7 @@ This is a sample test task for [https://bodylease.dev/vacancy/aspnet-developer].
   c. The user with "user" role must only be able to view the records
   d. A extra column "Total price with VAT" which is calculated in backend using formula: (Item amount * Price per item) * (1+VAT), where VAT value is retrieved from configuration file
   e. A unit test must be created for method which does point 2.d calculation;
-3. A Table called "product" must be created in the database using migration scripts and data must be inserted using seeding scripts. For
-example:
-# title quantiy price
-1 HDD 1TB 55 74.09
-2 HDD SSD 512GB 102 190.99
-3 RAM DDR4 16GB 47 80.32
-... ... ... ..
+3. A Table called "product" must be created in the database using migration scripts and data must be inserted using seeding scripts.
 4. Database requires the storage of data history, for example table "product_audit" which stores data about the changes - what was changed
 by which user and when the data was changed.
   a. Data is not required to be available in a UI but "admin" user must have access to them via HTTP API (JSON) with the ability to filter the
