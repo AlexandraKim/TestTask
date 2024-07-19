@@ -42,9 +42,5 @@ internal class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDb
     
     modelBuilder.Entity<ProductChange>()
       .HasKey(x => x.Id);
-    modelBuilder.Entity<ProductChange>()
-      .HasOne<Product>(x => x.Product)
-      .WithMany(x => x.ProductChanges)
-      .HasForeignKey(x => x.ProductId);
   }
 };

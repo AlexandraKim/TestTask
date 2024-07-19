@@ -1,4 +1,4 @@
-namespace TestTask.Models.Dto;
+namespace TestTask.Application.Dtos;
 
 public class UserDto
 {
