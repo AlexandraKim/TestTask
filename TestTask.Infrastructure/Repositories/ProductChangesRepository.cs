@@ -14,9 +14,11 @@ internal class ProductChangesRepository(AppDbContext dbContext) : RepositoryBase
     return await _entities.Where(x => x.ProductId == productId).ToArrayAsync();
   }
 
-  public Task<IEnumerable<ProductChange>> GetProductChangesForRangeAsync(DateTime from, DateTime to)
+  public async Task<IEnumerable<ProductChange>> GetProductChangesForRangeAsync(DateTime from, DateTime to, int? productId)
   {
-    throw new NotImplementedException();
+    return await _entities.Where(x => (x.Date >= from && x.Date <= to)
+                                                     // && (!productId.HasValue || x.ProductId == productId.Value)
+                                                     ).ToArrayAsync();
   }
 
   public async Task LogChangeAsync(Product product, ChangeType changeType, Guid userId)

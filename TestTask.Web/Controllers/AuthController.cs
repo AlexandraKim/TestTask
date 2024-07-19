@@ -4,7 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using TestTask.Application.Dtos;
 using TestTask.Application.Identity;
 using TestTask.Models.Dto;
-using Constants = TestTask.Models.Utility.Constants;
+using Constants = TestTask.Application.Utility.Constants;
 
 namespace TestTask.Controllers;
 
