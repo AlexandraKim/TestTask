@@ -4,7 +4,7 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
-        <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <RootNamespace>TestTask</RootNamespace>
     </PropertyGroup>
 
@@ -41,6 +41,12 @@
     <ItemGroup>
       <ProjectReference Include="..\TestTask.Application\TestTask.Application.csproj" />
       <ProjectReference Include="..\TestTask.Infrastructure\TestTask.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
     <PropertyGroup>
