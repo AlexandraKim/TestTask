@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestTask.Application.Dtos;
 using TestTask.Core.Interfaces.Repositories;
+using TestTask.Filters;
 using Constants = TestTask.Application.Utility.Constants;
 
 namespace TestTask.ApiControllers;
@@ -27,7 +28,7 @@ public class ProductChangesApiController(IProductChangesRepository productChange
   /// <response code="200">Success</response>
   /// <response code="401">If the user is unauthorized</response>
   [HttpGet]
-  [Authorize(Roles = Constants.RoleAdmin)]
+  [AuthRoleFilter(Constants.RoleAdmin)]
   [ProducesResponseType(StatusCodes.Status200OK)]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
   public async Task<ActionResult<ProductChangeDto[]>> Get([FromQuery(Name = "from")] DateTime from,
