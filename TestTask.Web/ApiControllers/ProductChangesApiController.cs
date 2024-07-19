@@ -21,7 +21,7 @@ public class ProductChangesApiController(IProductChangesRepository productChange
   /// <remarks>
   ///   Sample request:
   /// 
-  ///   GET /api/ProductChangesApi?from=2024-07-10T09%3A01%3A01.913Z&amp;to=2024-07-19T09%3A01%3A01.913Z
+  ///   GET /api/ProductChangesApi?from=2024-07-19T13:16:25.153Z&amp;2024-07-19T13:16:25.153Z
   ///
   /// </remarks>
   /// <response code="200">Success</response>
