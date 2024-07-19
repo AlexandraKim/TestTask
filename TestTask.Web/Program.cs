@@ -1,80 +1,69 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using TestTask.Data;
-using TestTask.Middleware;
-using TestTask.Models;
-using TestTask.Service;
-using TestTask.Service.IService;
+using System.Reflection;
+using Microsoft.OpenApi.Models;
+using TestTask.Application.Extensions;
+using TestTask.Core.Utility;
+using TestTask.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+VatValue.Value = builder.Configuration.GetSection("VatValue").GetValue<double>("Value");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddControllers();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<AppDbContext>(option =>
+builder.Services.AddSwaggerGen(options =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+  options.SwaggerDoc("v1", new OpenApiInfo
+  {
+    Version     = "v1",
+    Title       = "TestTask.WebApi",
+    Description = "TestTask.WebApi",
+  });
+  var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+  var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+  options.IncludeXmlComments(xmlPath);
 });
 
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
+builder.Services.AddControllers();
 
-builder.Services.AddScoped<IAuthService, AuthService>();
-// builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IProductChangeService, ProductChangeService>();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+builder.Services.ConfigureApplicationCookie(opt => 
+{                   
+  opt.AccessDeniedPath = "/Auth/AccessDenied";
+});
 
 builder.Services.AddHttpContextAccessor();
-VatValue.Value = builder.Configuration.GetSection("VatValue").GetValue<double>("Value");
-
-builder.AddConfiguredAutoMapper();
-
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+  app.UseExceptionHandler("/Home/Error");
+  app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
-// Configure the HTTP request pipeline.
-app.UseSwagger(); 
+app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
-    c.SwaggerEndpoint("../swagger/v1/swagger.json", "API");
-    c.RoutePrefix = "api";
+  c.SwaggerEndpoint("../swagger/v1/swagger.json", "API");
+  c.RoutePrefix = "api";
 });
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+  "default",
+  "{controller=Home}/{action=Index}/{id?}");
 
-ApplyMigration();
+await app.Services.ApplyMigrationsAsync();
+
 app.Run();
-
-
-void ApplyMigration()
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        if (_db.Database.GetPendingMigrations().Any()) _db.Database.Migrate();
-    }
-}

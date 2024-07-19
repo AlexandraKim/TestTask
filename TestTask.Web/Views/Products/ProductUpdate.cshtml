@@ -1,11 +1,11 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model TestTask.Models.Dto.ProductDto
+@model TestTask.Application.Dtos.ProductDto
 
 <form asp-action="ProductUpdate" enctype="multipart/form-data">
   <br/>
   <div class="container border p-3">
     <h1 class="text-white text-center">Update Product</h1>
-    <input asp-for="ProductId" hidden/>
+    <input asp-for="Id" hidden/>
     <hr/>
     <div class="row">
       <div class="col-2">

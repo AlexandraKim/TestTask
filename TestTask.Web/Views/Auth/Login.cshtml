@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model TestTask.Models.Dto.LoginRequestDto
+@model TestTask.Application.Dtos.LoginRequestDto
 
 <form method="post">
   <div class="container border p-4">
@@ -12,7 +12,7 @@
         <span asp-validation-for="UserName" class="text-danger"></span>
       </div>
       <div class="col-12 col-md-6 offset-md-3 pb-2">
-        <input asp-for="Password" class="form-control" placeholder="Password...">
+        <input asp-for="Password" class="form-control" placeholder="Password..." type="password">
         <span asp-validation-for="Password" class="text-danger"></span>
       </div>
       <div class="col-12 col-md-6 offset-md-3 pb-2">

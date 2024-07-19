@@ -1,14 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.IdentityModel.Tokens;
+using TestTask.Application.Dtos;
+using TestTask.Application.Identity;
 using TestTask.Models.Dto;
-using TestTask.Service.IService;
-using Constants = TestTask.Models.Utility.Constants;
+using Constants = TestTask.Application.Utility.Constants;
 
 namespace TestTask.Controllers;
 
 public class AuthController(
-  IAuthService authService
+  IIdentityService identityService
 ) : Controller
 {
   [HttpGet]
@@ -21,7 +22,7 @@ public class AuthController(
   [HttpPost]
   public async Task<IActionResult> Login(LoginRequestDto loginRequestDto)
   {
-    var loginResponse = await authService.LoginAsync(loginRequestDto);
+    var loginResponse = await identityService.LoginAsync(loginRequestDto);
     if (loginResponse)
       return RedirectToAction("Index", "Products");
 
@@ -44,7 +45,7 @@ public class AuthController(
   [HttpPost]
   public async Task<IActionResult> Register(RegistrationRequestDto registrationRequestDto)
   {
-    var result = await authService.RegisterAsync(registrationRequestDto);
+    var result = await identityService.RegisterAsync(registrationRequestDto);
     if (result.IsNullOrEmpty())
     {
       if (string.IsNullOrEmpty(registrationRequestDto.Role)) registrationRequestDto.Role = Constants.RoleUser;
@@ -67,7 +68,14 @@ public class AuthController(
   [HttpGet]
   public async Task<IActionResult> Logout()
   {
-    await authService.LogoutAsync();
+    await identityService.LogoutAsync();
+    return RedirectToAction("Index", "Home");
+  }
+
+  [HttpGet]
+  public IActionResult AccessDenied()
+  {
+    TempData["error"] = "Access Denied";
     return RedirectToAction("Index", "Home");
   }
 }
