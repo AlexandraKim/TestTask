@@ -1,5 +1,4 @@
 using System.Reflection;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.OpenApi.Models;
 using TestTask.Application.Extensions;
 using TestTask.Core.Utility;
@@ -48,6 +47,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
 
 app.UseSwagger();
