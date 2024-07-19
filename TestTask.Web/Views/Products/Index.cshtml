@@ -1,5 +1,6 @@
 @using TestTask.Models.Utility
-@model IEnumerable<TestTask.Models.Dto.ProductDto>
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model IEnumerable<TestTask.Application.Dtos.ProductDto>
 @if (User.IsInRole(Constants.RoleAdmin))
 {
   
@@ -32,7 +33,7 @@
    {
      <tr>
        <td>
-         @item.ProductId
+         @item.Id
        </td>
        <td>
          @item.Title
@@ -47,10 +48,10 @@
         @if (User.IsInRole(Constants.RoleAdmin))
         {
           <td>
-            <a class="btn btn-success" asp-action="ProductUpdate" asp-route-id="@item.ProductId">
+            <a class="btn btn-success" asp-action="ProductUpdate" asp-route-id="@item.Id">
               <i class="bi bi-pencil-square"></i>
             </a>
-            <a class="btn btn-danger" asp-action="ProductDelete" asp-route-id="@item.ProductId">
+            <a class="btn btn-danger" asp-action="ProductDelete" asp-route-id="@item.Id">
               <i class="bi bi-trash"></i>
             </a>
           </td>
