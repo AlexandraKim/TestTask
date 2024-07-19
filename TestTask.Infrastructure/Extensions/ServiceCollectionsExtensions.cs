@@ -10,6 +10,7 @@ using TestTask.Core.Utility;
 using TestTask.Infrastructure.Identity;
 using TestTask.Infrastructure.Persistence;
 using TestTask.Infrastructure.Repositories;
+using TestTask.Infrastructure.Services;
 
 namespace TestTask.Infrastructure.Extensions;
 
@@ -40,8 +41,6 @@ public static class ServiceCollectionsExtensions
   
   private static void AddAutoMapper(this IServiceCollection services)
   {
-    // VatValue.Value = configuration.GetSection("VatValue").GetValue<double>("Value");
-
     var mapper = MappingConfig.RegisterMaps().CreateMapper();
     services.AddSingleton(mapper);
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
