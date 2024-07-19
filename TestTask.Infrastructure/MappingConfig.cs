@@ -1,8 +1,9 @@
 using AutoMapper;
-using TestTask.Models;
-using TestTask.Models.Dto;
+using TestTask.Application.Dtos;
+using TestTask.Core.Entities;
+using TestTask.Core.Utility;
 
-namespace TestTask;
+namespace TestTask.Infrastructure;
 
 public class MappingConfig
 {

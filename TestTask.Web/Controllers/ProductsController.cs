@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TestTask.Models.Dto;
+using TestTask.Application.Dtos;
+using TestTask.Application.Services;
 using TestTask.Models.Utility;
-using TestTask.Service.IService;
+using TestTask.Utility;
 
 namespace TestTask.Controllers;
 
-public class ProductsController(IProductService productService) : Controller
+public class ProductsController(IProductService productService, IHttpContextAccessor httpContextAccessor) : Controller
 {
   // GET
   [Authorize]
@@ -36,7 +37,7 @@ public class ProductsController(IProductService productService) : Controller
   {
     if (ModelState.IsValid)
     {
-      var response = await productService.UpdateProductAsync(productDto);
+      var response = await productService.UpdateProductAsync(productDto, GetUserId());
 
       if (response is not null && response.IsSuccess)
       {
@@ -64,11 +65,11 @@ public class ProductsController(IProductService productService) : Controller
     TempData["error"] = response?.Message;
     return NotFound();
   }
-  
+
   [HttpPost]
   public async Task<IActionResult> ProductDelete(ProductDto productDto)
   {
-    var response = await productService.DeleteAsync(productDto.ProductId);
+    var response = await productService.DeleteAsync(productDto.Id, GetUserId());
 
     if (response is not null && response.IsSuccess)
     {
@@ -85,14 +86,14 @@ public class ProductsController(IProductService productService) : Controller
   {
     return View();
   }
-  
+
   [HttpPost]
   [Authorize(Roles = Constants.RoleAdmin)]
   public async Task<IActionResult> ProductCreate(ProductDto productDto)
   {
     if (ModelState.IsValid)
     {
-      var response = await productService.CreateProductAsync(productDto);
+      var response = await productService.CreateProductAsync(productDto, GetUserId());
       if (response is not null && response.IsSuccess)
       {
         TempData["success"] = response.Message;
@@ -103,5 +104,10 @@ public class ProductsController(IProductService productService) : Controller
     }
 
     return View(productDto);
+  }
+
+  private Guid GetUserId()
+  {
+    return httpContextAccessor.HttpContext.User.GetLoggedInUserId();
   }
 }
