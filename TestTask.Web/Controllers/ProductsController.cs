@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TestTask.Application.Dtos;
-using TestTask.Application.Services;
+using TestTask.Application.Products;
 using TestTask.Models.Utility;
 using TestTask.Utility;
 

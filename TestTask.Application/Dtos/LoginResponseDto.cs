@@ -1,3 +1,5 @@
+using TestTask.Application.Dtos;
+
 namespace TestTask.Models.Dto;
 
 public class LoginResponseDto

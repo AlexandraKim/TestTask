@@ -2,8 +2,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TestTask.Application.Identity;
 using TestTask.Core.Entities;
+using TestTask.Core.Interfaces;
+using TestTask.Core.Interfaces.Repositories;
+using TestTask.Core.Utility;
+using TestTask.Infrastructure.Identity;
 using TestTask.Infrastructure.Persistence;
+using TestTask.Infrastructure.Repositories;
 
 namespace TestTask.Infrastructure.Extensions;
 
@@ -15,19 +21,36 @@ public static class ServiceCollectionsExtensions
     {
       option.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
     });
+    
+    services.AddIdentity();
+
+    services.AddAutoMapper();
+
+    services.AddRepositories();
   }
 
-  public static void AddIdentity(this IServiceCollection services)
+  private static void AddIdentity(this IServiceCollection services)
   {
     services.AddIdentity<ApplicationUser, IdentityRole>()
       .AddEntityFrameworkStores<AppDbContext>()
       .AddDefaultTokenProviders();
+ 
+    services.AddTransient<IIdentityService, IdentityService>();
   }
   
-  public static void AddAutoMapper(this IServiceCollection services)
+  private static void AddAutoMapper(this IServiceCollection services)
   {
+    // VatValue.Value = configuration.GetSection("VatValue").GetValue<double>("Value");
+
     var mapper = MappingConfig.RegisterMaps().CreateMapper();
     services.AddSingleton(mapper);
     services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+  }
+
+  private static void AddRepositories(this IServiceCollection services)
+  {
+    services.AddScoped<IUnitOfWork, UnitOfWork>();
+    services.AddScoped<IProductsRepository, ProductsRepository>();
+    services.AddScoped<IProductChangesRepository, ProductChangesRepository>();
   }
 }

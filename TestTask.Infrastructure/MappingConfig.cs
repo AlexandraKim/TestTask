@@ -5,7 +5,7 @@ using TestTask.Core.Utility;
 
 namespace TestTask.Infrastructure;
 
-public class MappingConfig
+internal class MappingConfig
 {
   public static MapperConfiguration RegisterMaps()
   {

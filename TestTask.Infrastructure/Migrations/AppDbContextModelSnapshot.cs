@@ -296,8 +296,6 @@ namespace TestTask.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("ProductChanges");
                 });
 
@@ -350,22 +348,6 @@ namespace TestTask.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("TestTask.Core.Entities.ProductChange", b =>
-                {
-                    b.HasOne("TestTask.Core.Entities.Product", "Product")
-                        .WithMany("ProductChanges")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("TestTask.Core.Entities.Product", b =>
-                {
-                    b.Navigation("ProductChanges");
                 });
 #pragma warning restore 612, 618
         }

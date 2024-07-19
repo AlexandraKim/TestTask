@@ -5,7 +5,7 @@ using TestTask.Core.Interfaces;
 using TestTask.Core.Interfaces.Repositories;
 using TestTask.Core.Utility;
 
-namespace TestTask.Application.Services;
+namespace TestTask.Application.Products;
 
 public class ProductService(
   IProductsRepository productsRepository, 

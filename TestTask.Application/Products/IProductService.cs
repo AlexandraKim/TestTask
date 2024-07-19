@@ -1,6 +1,6 @@
 using TestTask.Application.Dtos;
 
-namespace TestTask.Application.Services;
+namespace TestTask.Application.Products;
 
 public interface IProductService
 {
