@@ -1,7 +1,7 @@
 using TestTask.Core.Interfaces;
 using TestTask.Infrastructure.Persistence;
 
-namespace TestTask.Infrastructure;
+namespace TestTask.Infrastructure.Services;
 
 internal class UnitOfWork(AppDbContext dbContext) : IUnitOfWork
 {
@@ -25,10 +25,5 @@ internal class UnitOfWork(AppDbContext dbContext) : IUnitOfWork
       Console.WriteLine(e);
       throw;
     }
-  }
-
-  public async Task SaveAsync()
-  {
-    await dbContext.SaveChangesAsync();
   }
 }

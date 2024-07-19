@@ -1,7 +1,10 @@
 using TestTask.Application.Extensions;
+using TestTask.Core.Utility;
 using TestTask.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+VatValue.Value = builder.Configuration.GetSection("VatValue").GetValue<double>("Value");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -12,8 +15,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 
-// // builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-//
 builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
