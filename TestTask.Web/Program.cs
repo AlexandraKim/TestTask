@@ -29,14 +29,12 @@ builder.Services.AddControllers();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-  .AddCookie(options =>
-  {
-    options.ExpireTimeSpan = TimeSpan.FromHours(10);
-    options.LoginPath = "/Auth/Login";
-    options.AccessDeniedPath = "/Auth/AccessDenied";
-  });
+builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
+builder.Services.ConfigureApplicationCookie(opt => 
+{                   
+  opt.AccessDeniedPath = "/Auth/AccessDenied";
+});
 
 builder.Services.AddHttpContextAccessor();
 

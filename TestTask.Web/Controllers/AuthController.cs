@@ -71,4 +71,11 @@ public class AuthController(
     await identityService.LogoutAsync();
     return RedirectToAction("Index", "Home");
   }
+
+  [HttpGet]
+  public IActionResult AccessDenied()
+  {
+    TempData["error"] = "Access Denied";
+    return RedirectToAction("Index", "Home");
+  }
 }

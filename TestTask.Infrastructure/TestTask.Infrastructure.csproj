@@ -28,4 +28,9 @@
     <ItemGroup>
       <Folder Include="Migrations\" />
     </ItemGroup>
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+            <_Parameter1>TestTask.UnitTests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 </Project>
